@@ -1,56 +1,54 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { isAuthenticated } from "./auth/isAuthenticated";
 
 const Home = () => {
   const navigate = useNavigate();
+  const loggedIn = isAuthenticated();
+
+  const styles = {
+    container: {
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
+      height: "100vh", // Ensure it's vertically centered
+      textAlign: "center", // Center the text
+    },
+    button: {
+      padding: "10px 20px",
+      fontSize: "1rem",
+      color: "#fff",
+      backgroundColor: "orange", 
+      border: "none",
+      borderRadius: "5px",
+      cursor: "pointer",
+      margin: "10px",
+    },
+  };
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.heading}>Welcome to Priority Hub</h1>
-      <p style={styles.subHeading}>Manage your tasks and boost your productivity.</p>
-      <div style={styles.buttonContainer}>
-        <button style={styles.button} onClick={() => navigate('/register')}>
-          Register
-        </button>
-        <button style={styles.button} onClick={() => navigate('/login')}>
-          Login
-        </button>
+      <h1>Welcome to Priority Hub</h1>
+      <div className="home-buttons">
+        {!loggedIn && (
+          <>
+            <button style={styles.button} onClick={() => navigate("/login")}>
+              Login
+            </button>
+            <button style={styles.button} onClick={() => navigate("/register")}>
+              Register
+            </button>
+          </>
+        )}
+        {loggedIn && (
+          <button style={styles.button} onClick={() => navigate("/dashboard")}>
+            Go to Dashboard
+          </button>
+        )}
       </div>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: '100vh',
-    backgroundColor: '#f5f5f5',
-  },
-  heading: {
-    fontSize: '2rem',
-    marginBottom: '1rem',
-  },
-  subHeading: {
-    fontSize: '1rem',
-    marginBottom: '2rem',
-    color: '#555',
-  },
-  buttonContainer: {
-    display: 'flex',
-    gap: '1rem',
-  },
-  button: {
-    padding: '10px 20px',
-    fontSize: '1rem',
-    backgroundColor: '#007bff',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
-  },
 };
 
 export default Home;
