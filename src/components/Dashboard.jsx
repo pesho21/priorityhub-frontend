@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Logout from "./auth/Logout";
 import axios from "axios";
 
@@ -51,6 +51,8 @@ const Dashboard = () => {
         recurrenceInterval: null,
         dueDate: "",
       });
+
+      fetchTasks();  
     } catch (err) {
       console.error("Error creating task:", err);
     }
@@ -73,6 +75,10 @@ const Dashboard = () => {
     }
   };
 
+  useEffect(() => {
+    fetchTasks();
+  }, []);
+
   return (
     <div>
       <h1>Dashboard</h1>
@@ -80,7 +86,7 @@ const Dashboard = () => {
         Create Task
       </button>
       <button onClick={fetchTasks} style={styles.button}>
-        View My Tasks
+        Refresh Task list
       </button>
       <Logout />
 
