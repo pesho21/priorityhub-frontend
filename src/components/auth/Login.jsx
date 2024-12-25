@@ -5,37 +5,87 @@ import axios from "axios";
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState(null);
-  const navigate = useNavigate();   
+  const navigate = useNavigate();
+
+  const styles = {
+    container: {
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center", 
+      height: "100vh",
+      textAlign: "center",
+    },
+    formGroup: {
+      display: "flex",
+      flexDirection: "row", 
+      alignItems: "center",
+      justifyContent: "center",
+      margin: "10px 0",
+    },
+    label: {
+      width: "80px", 
+      textAlign: "right",
+      marginRight: "10px",
+    },
+    input: {
+      border: "none",
+      borderBottom: "2px solid black",
+      outline: "none",
+      margin: "6px 0",
+      width: "200px", 
+    },
+    button: {
+      padding: "10px 20px",
+      fontSize: "1rem",
+      color: "#fff",
+      backgroundColor: "orange",
+      border: "none",
+      borderRadius: "5px",
+      cursor: "pointer",
+      margin: "10px",
+    },
+    errorMessage: {
+      color: "red",
+      marginBottom: "10px",
+    },
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    setError(null); 
+    setError(null);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
-      const response = await axios.post("http://localhost:3000/auth/login", formData);
+      const response = await axios.post(
+        "http://localhost:3000/auth/login",
+        formData
+      );
       localStorage.setItem("token", response.data.accessToken);
       navigate("/dashboard");
     } catch (err) {
       const message =
-        err.response?.data?.message || "Invalid login credentials. Please try again.";
+        err.response?.data?.message ||
+        "Invalid login credentials. Please try again.";
       setError(message);
     }
   };
-  
 
   return (
-    <div className="login-container">
+    <div style={styles.container} className="login-container">
       <h1>Login</h1>
-      {error && <div className="error-message">{error}</div>}
+      {error && <div style={styles.errorMessage}>{error}</div>}
       <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="email">Email:</label>
+        <div style={styles.formGroup} className="form-group">
+          <label style={styles.label} htmlFor="email">
+            Email:
+          </label>
           <input
+            style={styles.input}
             type="email"
             id="email"
             name="email"
@@ -45,9 +95,12 @@ const Login = () => {
           />
         </div>
 
-        <div className="form-group">
-          <label htmlFor="password">Password:</label>
+        <div style={styles.formGroup} className="form-group">
+          <label style={styles.label} htmlFor="password">
+            Password:
+          </label>
           <input
+            style={styles.input}
             type="password"
             id="password"
             name="password"
@@ -57,7 +110,9 @@ const Login = () => {
           />
         </div>
 
-        <button type="submit">Login</button>
+        <button style={styles.button} type="submit">
+          Login
+        </button>
       </form>
     </div>
   );

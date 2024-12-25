@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Logout from "./auth/Logout";
 import axios from "axios";
 
 const Dashboard = () => {
@@ -81,6 +82,7 @@ const Dashboard = () => {
       <button onClick={fetchTasks} style={styles.button}>
         View My Tasks
       </button>
+      <Logout />
 
       {isMenuOpen && (
         <div style={styles.menu}>

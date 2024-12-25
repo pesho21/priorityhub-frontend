@@ -10,6 +10,50 @@ const Register = () => {
     confirmPassword: "",
   });
 
+  const styles = {
+    container: {
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center", 
+      height: "100vh",
+      textAlign: "center",
+    },
+    formGroup: {
+      display: "flex",
+      flexDirection: "row", 
+      alignItems: "center",
+      justifyContent: "center",
+      margin: "10px 0",
+    },
+    label: {
+      width: "80px", 
+      textAlign: "right",
+      marginRight: "10px",
+    },
+    input: {
+      border: "none",
+      borderBottom: "2px solid black",
+      outline: "none",
+      margin: "6px 0",
+      width: "200px", 
+    },
+    button: {
+      padding: "10px 20px",
+      fontSize: "1rem",
+      color: "#fff",
+      backgroundColor: "orange",
+      border: "none",
+      borderRadius: "5px",
+      cursor: "pointer",
+      margin: "10px",
+    },
+    errorMessage: {
+      color: "red",
+      marginBottom: "10px",
+    },
+  };
+
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
@@ -46,22 +90,23 @@ const Register = () => {
   };
 
   return (
-    <div className="register-container">
+    <div style={styles.container} className="register-container">
       <h1>Register</h1>
-      {error && <div className="error-message">{error}</div>}
+      {error && <div style={styles.errorMessage}className="error-message">{error}</div>}
       {success && (
         <div className="success-message">
           {success}
-          <button onClick={() => navigate("/login")} style={styles.loginButton}>
+          <button onClick={() => navigate("/login")} style={styles.button}>
             Go to Login
           </button>
         </div>
       )}
       {!success && (
         <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="email">Email:</label>
+          <div style={styles.formGroup} className="form-group">
+            <label style={styles.label} htmlFor="email">Email:</label>
             <input
+              style={styles.input}
               type="email"
               id="email"
               name="email"
@@ -71,9 +116,10 @@ const Register = () => {
             />
           </div>
 
-          <div className="form-group">
-            <label htmlFor="username">Username:</label>
+          <div style={styles.formGroup} className="form-group">
+            <label style={styles.label} htmlFor="username">Username:</label>
             <input
+              style={styles.input}
               type="text"
               id="username"
               name="username"
@@ -83,9 +129,10 @@ const Register = () => {
             />
           </div>
 
-          <div className="form-group">
-            <label htmlFor="password">Password:</label>
+          <div style={styles.formGroup} className="form-group">
+            <label style={styles.label} htmlFor="password">Password:</label>
             <input
+              style={styles.input}
               type="password"
               id="password"
               name="password"
@@ -95,9 +142,10 @@ const Register = () => {
             />
           </div>
 
-          <div className="form-group">
-            <label htmlFor="confirmPassword">Confirm Password:</label>
+          <div style={styles.formGroup} className="form-group">
+            <label style={styles.label} htmlFor="confirmPassword">Confirm Password:</label>
             <input
+              style={styles.input}
               type="password"
               id="confirmPassword"
               name="confirmPassword"
@@ -107,24 +155,12 @@ const Register = () => {
             />
           </div>
 
-          <button type="submit">Register</button>
+          <button style = {styles.button} type="submit">Register</button>
         </form>
       )}
     </div>
   );
 };
 
-const styles = {
-  loginButton: {
-    marginTop: "10px",
-    padding: "10px 20px",
-    fontSize: "1rem",
-    backgroundColor: "#007bff",
-    color: "#fff",
-    border: "none",
-    borderRadius: "5px",
-    cursor: "pointer",
-  },
-};
 
 export default Register;

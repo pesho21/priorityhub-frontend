@@ -12,8 +12,8 @@ const Home = () => {
       flexDirection: "column",
       justifyContent: "center",
       alignItems: "center",
-      height: "100vh", // Ensure it's vertically centered
-      textAlign: "center", // Center the text
+      height: "100vh",
+      textAlign: "center",
     },
     button: {
       padding: "10px 20px",
@@ -43,7 +43,7 @@ const Home = () => {
         )}
         {loggedIn && (
           <button style={styles.button} onClick={() => navigate("/dashboard")}>
-            Go to Dashboard
+            Dashboard
           </button>
         )}
       </div>
