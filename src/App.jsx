@@ -7,6 +7,7 @@ import Dashboard from "./components/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import RedirectRoute from "./components/RedirectRoute";
 import Home from "./components/Home";
+import Sprints from "./components/Sprints";
 
 const App = () => {
   return (
@@ -34,6 +35,14 @@ const App = () => {
           element={
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route 
+          path="/sprints"
+          element={
+            <ProtectedRoute>
+              <Sprints />
             </ProtectedRoute>
           }
         />
