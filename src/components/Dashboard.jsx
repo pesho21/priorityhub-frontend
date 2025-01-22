@@ -13,9 +13,11 @@ const Dashboard = () => {
     recurrenceInterval: null,
     dueDate: "",
     sprintId: "",
+    assignees: [],
   });
   const [tasks, setTasks] = useState([]);
   const [sprints, setSprints] = useState([]);
+  const [users, setUsers] = useState([]); 
   const [isLoading, setIsLoading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editingTaskId, setEditingTaskId] = useState(null);
@@ -31,6 +33,7 @@ const Dashboard = () => {
       recurrenceInterval: null,
       dueDate: "",
       sprintId: "",
+      assignees: [],
     });
   };
 
@@ -41,6 +44,34 @@ const Dashboard = () => {
       [name]: value,
     }));
   };
+
+  const handleAssigneeChange = (e) => {
+    const selectedUsers = Array.from(e.target.selectedOptions, (option) => option.value);
+    setTaskDetails((prevDetails) => ({
+      ...prevDetails,
+      assignees: selectedUsers,
+    }));
+  };
+
+  const handleMarkAsComplete = async (taskId) => {
+    try {
+      await axios.patch(
+        `http://localhost:3000/task/${taskId}`,
+        { status: "completed" },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+  
+      console.log("Task marked as complete:", taskId);
+      fetchTasks(); 
+    } catch (err) {
+      console.error("Error marking task as complete:", err);
+    }
+  };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -85,7 +116,7 @@ const Dashboard = () => {
 
   const fetchAvailableSprints = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/sprint/list/available", {
+      const response = await axios.get("http://localhost:3000/sprint/filter/available", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -93,6 +124,19 @@ const Dashboard = () => {
       setSprints(response.data);
     } catch (err) {
       console.error("Error fetching sprints:", err);
+    }
+  };
+
+  const fetchUsers = async () => {
+    try {
+      const response = await axios.get("http://localhost:3000/users", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setUsers(response.data.users);
+    } catch (err) {
+      console.error("Error fetching users:", err);
     }
   };
 
@@ -106,6 +150,7 @@ const Dashboard = () => {
       recurrenceInterval: task.recurrenceInterval,
       dueDate: task.dueDate,
       sprintId: task.sprintId || "",
+      assignees: task.assignees.map((assignee) => assignee.id),
     });
     setIsMenuOpen(true);
   };
@@ -128,6 +173,7 @@ const Dashboard = () => {
   useEffect(() => {
     fetchTasks();
     fetchAvailableSprints();
+    fetchUsers();
   }, []);
 
   return (
@@ -230,6 +276,23 @@ const Dashboard = () => {
                 ))}
               </select>
             </div>
+            <div style={styles.formGroup}>
+              <label htmlFor="assignees">Assign Users:</label>
+              <select
+                id="assignees"
+                name="assignees"
+                multiple
+                value={taskDetails.assignees}
+                onChange={handleAssigneeChange}
+                style={styles.input}
+              >
+                {users.map((user) => (
+                  <option key={user.id} value={user.id}>
+                    {user.username}
+                  </option>
+                ))}
+              </select>
+            </div>
 
             <button type="submit" style={styles.button}>
               {isEditing ? "Update Task" : "Create Task"}
@@ -248,41 +311,45 @@ const Dashboard = () => {
           <h2>My Tasks</h2>
           {tasks.length > 0 ? (
             <ul>
-              {tasks.map((task) => (
-                <li key={task.id} style={styles.taskItem}>
-                  <h3>{task.title}</h3>
-                  <p>{task.description}</p>
-                  <p>
-                    <strong>Priority:</strong> {task.priority}
-                  </p>
-                  <p>
-                    <strong>Due Date:</strong> {task.dueDate}
-                  </p>
-                  <p>
-                    <strong>Recurrence:</strong>{" "}
-                    {task.recurrenceInterval || "None"}
-                  </p>
-                  <p>
-                    <strong>Sprint:</strong>{" "}
-                    {task.sprintId
-                      ? sprints.find((s) => s.id === task.sprintId)?.name || "N/A"
-                      : "Not Assigned"}
-                  </p>
+            {tasks.map((task) => (
+              <li key={task.id} style={styles.taskItem}>
+                <h3>{task.title}</h3>
+                <p>{task.description}</p>
+                <p>
+                  <strong>Priority:</strong> {task.priority}
+                </p>
+                <p>
+                  <strong>Due Date:</strong> {task.dueDate}
+                </p>
+                <p>
+                  <strong>Recurrence:</strong> {task.recurrenceInterval || "None"}
+                </p>
+                <p>
+                  <strong>Sprint:</strong>{" "}
+                  {task.sprintId
+                    ? sprints.find((s) => s.id === task.sprintId)?.name || "N/A"
+                    : "Not Assigned"}
+                </p>
+                <p>
+                  <strong>Status:</strong> {task.status}
+                </p>
+                <button onClick={() => handleEdit(task)} style={styles.button}>
+                  Edit
+                </button>
+                <button onClick={() => handleDelete(task.id)} style={styles.button}>
+                  Delete
+                </button>
+                {task.status !== "completed" && (
                   <button
-                    onClick={() => handleEdit(task)}
+                    onClick={() => handleMarkAsComplete(task.id)}
                     style={styles.button}
                   >
-                    Edit
+                    Mark as Complete
                   </button>
-                  <button
-                    onClick={() => handleDelete(task.id)}
-                    style={styles.button}
-                  >
-                    Delete
-                  </button>
-                </li>
-              ))}
-            </ul>
+                )}
+              </li>
+            ))}
+          </ul>          
           ) : (
             <p>No tasks found.</p>
           )}
