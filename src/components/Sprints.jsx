@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 const Sprints = () => {
   const [sprints, setSprints] = useState([]);
+  const [report, setReport] = useState(null);
   const [selectedSprint, setSelectedSprint] = useState(null);
   const [tasks, setTasks] = useState([]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -49,6 +50,19 @@ const Sprints = () => {
       console.error("Error fetching tasks:", error);
     }
   };
+
+  const fetchReport = async (sprintId) => {
+    try {
+      const response = await axios.get(`http://localhost:3000/sprint/${sprintId}/report`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setReport(response.data);
+    } catch (error) {
+      console.error("Error fetching report:", error);
+    }
+  };  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -163,6 +177,23 @@ const Sprints = () => {
             </option>
           ))}
         </select>
+        <button
+          onClick={() => fetchReport(selectedSprint)}
+          style={styles.button}
+          disabled={!selectedSprint}
+        >
+          Generate Report
+        </button>
+
+        {report && (
+          <div style={styles.report}>
+            <h3>Report for Sprint {selectedSprint}</h3>
+            <p>Total Tasks Completed: {report.totalCompleted}</p>
+            <p>Low Priority Tasks: {report.priorityCounts.low || 0}</p>
+            <p>Medium Priority Tasks: {report.priorityCounts.medium || 0}</p>
+            <p>High Priority Tasks: {report.priorityCounts.high || 0}</p>
+          </div>
+        )}
       </div>
 
       <div style={{ marginTop: "20px" }}>
@@ -229,6 +260,13 @@ const styles = {
     border: "1px solid #ddd",
     borderRadius: "5px",
     backgroundColor: "#f0f0f0",
+  },
+  report: {
+    marginTop: "20px",
+    padding: "15px",
+    border: "1px solid #ddd",
+    borderRadius: "5px",
+    backgroundColor: "#f9f9f9",
   },
 };
 
