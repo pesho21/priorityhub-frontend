@@ -192,6 +192,7 @@ const Sprints = () => {
             <p>Low Priority Tasks: {report.priorityCounts.low || 0}</p>
             <p>Medium Priority Tasks: {report.priorityCounts.medium || 0}</p>
             <p>High Priority Tasks: {report.priorityCounts.high || 0}</p>
+            <p>Total Time Spent Working on Tasks: {" "}{Math.floor(report.totalTime / 60)} minutes{" "}{Math.floor(report.totalTime % 60)} seconds</p>
           </div>
         )}
       </div>
@@ -213,7 +214,7 @@ const Sprints = () => {
                 </p>
                 <p>
                   <strong>Assignees:</strong>{" "}
-                  {task.users.map((user) => user.name).join(", ")}
+                  {task.users.map((user) => user.username).join(", ")}
                 </p>
               </li>
             ))}

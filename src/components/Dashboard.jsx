@@ -106,13 +106,66 @@ const Dashboard = () => {
         },
       });
 
-      setTasks(response.data);
+      const updatedTasks = response.data.map((task) => ({
+        ...task,
+        startTimestamp: null,
+        totalTime: task.totalTime || 0, 
+      }));
+
+      setTasks(updatedTasks);
     } catch (err) {
       console.error("Error fetching tasks:", err);
     } finally {
       setIsLoading(false);
     }
   };
+
+  const handleStartStop = async (task) => {
+    const isTaskRunning = task.lastStartTime && !task.lastStopTime;
+    const now = new Date().toISOString(); 
+    const changeStatus = {
+      status: "in_progress",
+    };
+  
+    try {
+      let updatedTimeSpent = task.timeSpentOnTask || 0;
+      if (isTaskRunning) {
+        const lastStart = new Date(task.lastStartTime);
+        const timeElapsed = Math.floor((new Date(now) - lastStart) / 1000); 
+        updatedTimeSpent += timeElapsed;
+      }
+      else {
+        await axios.patch(`http://localhost:3000/task/${task.id}`, changeStatus, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+      }
+  
+      const payload = isTaskRunning
+        ? {
+            lastStopTime: now,
+            timeSpentOnTask: updatedTimeSpent,
+          }
+        : {
+            lastStartTime: now,
+            lastStopTime: null, 
+          };
+  
+      await axios.patch(`http://localhost:3000/task/${task.id}`, payload, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+  
+      console.log(isTaskRunning ? "Task stopped:" : "Task started:", task.id);
+  
+      fetchTasks();
+    } catch (err) {
+      console.error("Error updating task timing:", err);
+    }
+  };
+  
 
   const fetchAvailableSprints = async () => {
     try {
@@ -333,12 +386,25 @@ const Dashboard = () => {
                 <p>
                   <strong>Status:</strong> {task.status}
                 </p>
+                <p>
+                  <strong>Time Spent:</strong> {" "}
+                    {Math.floor(task.timeSpentOnTask / 60)} minutes{" "}
+                    {Math.floor(task.timeSpentOnTask % 60)} seconds
+                </p>
                 <button onClick={() => handleEdit(task)} style={styles.button}>
                   Edit
                 </button>
                 <button onClick={() => handleDelete(task.id)} style={styles.button}>
                   Delete
                 </button>
+                {task.status !== "completed" && (
+                  <button
+                    onClick={() => handleStartStop(task)}
+                    style={styles.button}
+                 >
+                    {task.lastStartTime && !task.lastStopTime ? "Stop" : "Start"}
+                  </button>
+                )}
                 {task.status !== "completed" && (
                   <button
                     onClick={() => handleMarkAsComplete(task.id)}
