@@ -214,7 +214,7 @@ const Sprints = () => {
                 </p>
                 <p>
                   <strong>Assignees:</strong>{" "}
-                  {task.users.map((user) => user.username).join(", ")}
+                  {task.assignees.map((user) => user.username).join(", ")}
                 </p>
               </li>
             ))}
