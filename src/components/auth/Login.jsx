@@ -62,7 +62,7 @@ const Login = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/auth/login",
+        `${process.env.REACT_APP_API_BASE}auth/login`,
         formData
       );
       localStorage.setItem("token", response.data.accessToken);

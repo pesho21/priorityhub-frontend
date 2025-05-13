@@ -56,7 +56,7 @@ const Dashboard = () => {
   const handleMarkAsComplete = async (taskId) => {
     try {
       await axios.patch(
-        `http://localhost:3000/task/${taskId}`,
+        `${process.env.REACT_APP_API_BASE}task/${taskId}`,
         { status: "completed" },
         {
           headers: {
@@ -78,8 +78,8 @@ const Dashboard = () => {
 
     try {
       const endpoint = isEditing
-        ? `http://localhost:3000/task/${editingTaskId}`
-        : "http://localhost:3000/task";
+        ? `${process.env.REACT_APP_API_BASE}task/${editingTaskId}`
+        : `${process.env.REACT_APP_API_BASE}task`;
       const method = isEditing ? "patch" : "post";
 
       const response = await axios[method](endpoint, taskDetails, {
@@ -100,7 +100,7 @@ const Dashboard = () => {
   const fetchTasks = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get("http://localhost:3000/task", {
+      const response = await axios.get(`${process.env.REACT_APP_API_BASE}task`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -135,7 +135,7 @@ const Dashboard = () => {
         updatedTimeSpent += timeElapsed;
       }
       else {
-        await axios.patch(`http://localhost:3000/task/${task.id}`, changeStatus, {
+        await axios.patch(`${process.env.REACT_APP_API_BASE}task/${task.id}`, changeStatus, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
@@ -152,7 +152,7 @@ const Dashboard = () => {
             lastStopTime: null, 
           };
   
-      await axios.patch(`http://localhost:3000/task/${task.id}`, payload, {
+      await axios.patch(`${process.env.REACT_APP_API_BASE}task/${task.id}`, payload, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -169,7 +169,7 @@ const Dashboard = () => {
 
   const fetchAvailableSprints = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/sprint/filter/available", {
+      const response = await axios.get(`${process.env.REACT_APP_API_BASE}sprint/filter/available`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -182,7 +182,7 @@ const Dashboard = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/users", {
+      const response = await axios.get(`${process.env.REACT_APP_API_BASE}users`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -210,7 +210,7 @@ const Dashboard = () => {
 
   const handleDelete = async (taskId) => {
     try {
-      await axios.delete(`http://localhost:3000/task/${taskId}`, {
+      await axios.delete(`${process.env.REACT_APP_API_BASE}task/${taskId}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
