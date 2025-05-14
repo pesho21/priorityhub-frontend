@@ -4,6 +4,7 @@ import axios from "axios";
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
+  const [usernameForm, setUsernameForm] = useState({ username: "", password: "" });
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
@@ -12,19 +13,19 @@ const Login = () => {
       display: "flex",
       flexDirection: "column",
       justifyContent: "center",
-      alignItems: "center", 
+      alignItems: "center",
       height: "100vh",
       textAlign: "center",
     },
     formGroup: {
       display: "flex",
-      flexDirection: "row", 
+      flexDirection: "row",
       alignItems: "center",
       justifyContent: "center",
       margin: "10px 0",
     },
     label: {
-      width: "80px", 
+      width: "100px",
       textAlign: "right",
       marginRight: "10px",
     },
@@ -33,7 +34,7 @@ const Login = () => {
       borderBottom: "2px solid black",
       outline: "none",
       margin: "6px 0",
-      width: "200px", 
+      width: "200px",
     },
     button: {
       padding: "10px 20px",
@@ -49,17 +50,26 @@ const Login = () => {
       color: "red",
       marginBottom: "10px",
     },
+    divider: {
+      margin: "20px 0",
+      fontWeight: "bold",
+    },
   };
 
-  const handleChange = (e) => {
+  const handleEmailChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     setError(null);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleUsernameChange = (e) => {
+    const { name, value } = e.target;
+    setUsernameForm((prev) => ({ ...prev, [name]: value }));
+    setError(null);
+  };
 
+  const handleEmailLogin = async (e) => {
+    e.preventDefault();
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_API_BASE}auth/login`,
@@ -75,12 +85,36 @@ const Login = () => {
     }
   };
 
+  const handleUsernameLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const resolveResponse = await axios.get(
+        `${process.env.REACT_APP_API_BASE}users/${encodeURIComponent(usernameForm.username)}/email`
+      );
+      const email = resolveResponse.data.email;
+
+      const loginResponse = await axios.post(
+        `${process.env.REACT_APP_API_BASE}auth/login`,
+        { email, password: usernameForm.password }
+      );
+
+      localStorage.setItem("token", loginResponse.data.accessToken);
+      navigate("/dashboard");
+    } catch (err) {
+      const message =
+        err.response?.data?.message ||
+        "Invalid username or password. Please try again.";
+      setError(message);
+    }
+  };
+
   return (
     <div style={styles.container} className="login-container">
       <h1>Login</h1>
       {error && <div style={styles.errorMessage}>{error}</div>}
-      <form onSubmit={handleSubmit}>
-        <div style={styles.formGroup} className="form-group">
+
+      <form onSubmit={handleEmailLogin}>
+        <div style={styles.formGroup}>
           <label style={styles.label} htmlFor="email">
             Email:
           </label>
@@ -90,12 +124,12 @@ const Login = () => {
             id="email"
             name="email"
             value={formData.email}
-            onChange={handleChange}
+            onChange={handleEmailChange}
             required
           />
         </div>
 
-        <div style={styles.formGroup} className="form-group">
+        <div style={styles.formGroup}>
           <label style={styles.label} htmlFor="password">
             Password:
           </label>
@@ -105,13 +139,52 @@ const Login = () => {
             id="password"
             name="password"
             value={formData.password}
-            onChange={handleChange}
+            onChange={handleEmailChange}
             required
           />
         </div>
 
         <button style={styles.button} type="submit">
-          Login
+          Login with Email
+        </button>
+      </form>
+
+      <div style={styles.divider}>OR</div>
+
+      {/* Username Login */}
+      <form onSubmit={handleUsernameLogin}>
+        <div style={styles.formGroup}>
+          <label style={styles.label} htmlFor="username">
+            Username:
+          </label>
+          <input
+            style={styles.input}
+            type="text"
+            id="username"
+            name="username"
+            value={usernameForm.username}
+            onChange={handleUsernameChange}
+            required
+          />
+        </div>
+
+        <div style={styles.formGroup}>
+          <label style={styles.label} htmlFor="password2">
+            Password:
+          </label>
+          <input
+            style={styles.input}
+            type="password"
+            id="password2"
+            name="password"
+            value={usernameForm.password}
+            onChange={handleUsernameChange}
+            required
+          />
+        </div>
+
+        <button style={styles.button} type="submit">
+          Login with Username
         </button>
       </form>
     </div>
