@@ -105,7 +105,6 @@ const Dashboard = () => {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-
       const updatedTasks = response.data.map((task) => ({
         ...task,
         startTimestamp: null,
@@ -364,7 +363,7 @@ const Dashboard = () => {
           <h2>My Tasks</h2>
           {tasks.length > 0 ? (
             <ul>
-            {tasks.map((task) => (
+              {tasks.map((task) => (
               <li key={task.id} style={styles.taskItem}>
                 <h3>{task.title}</h3>
                 <p>{task.description}</p>
