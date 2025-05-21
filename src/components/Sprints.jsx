@@ -27,7 +27,7 @@ const Sprints = () => {
 
   const fetchSprints = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_BASE}sprint`, {
+      const response = await axios.get(`${process.env.REACT_APP_API_BASE}/sprint`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -40,7 +40,7 @@ const Sprints = () => {
 
   const fetchTasks = async (sprintId) => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_BASE}sprint/${sprintId}/tasks`, {
+      const response = await axios.get(`${process.env.REACT_APP_API_BASE}/sprint/${sprintId}/tasks`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -53,7 +53,7 @@ const Sprints = () => {
 
   const fetchReport = async (sprintId) => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_BASE}sprint/${sprintId}/report`, {
+      const response = await axios.get(`${process.env.REACT_APP_API_BASE}/sprint/${sprintId}/report`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -76,7 +76,7 @@ const Sprints = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(`${process.env.REACT_APP_API_BASE}sprint`, sprintDetails, {
+      const response = await axios.post(`${process.env.REACT_APP_API_BASE}/sprint`, sprintDetails, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },

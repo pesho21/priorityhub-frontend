@@ -72,7 +72,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_BASE}auth/login`,
+        `${process.env.REACT_APP_API_BASE}/auth/login`,
         formData
       );
       localStorage.setItem("token", response.data.accessToken);
@@ -89,12 +89,12 @@ const Login = () => {
     e.preventDefault();
     try {
       const resolveResponse = await axios.get(
-        `${process.env.REACT_APP_API_BASE}users/${encodeURIComponent(usernameForm.username)}/email`
+        `${process.env.REACT_APP_API_BASE}/users/${encodeURIComponent(usernameForm.username)}/email`
       );
       const email = resolveResponse.data.email;
 
       const loginResponse = await axios.post(
-        `${process.env.REACT_APP_API_BASE}auth/login`,
+        `${process.env.REACT_APP_API_BASE}/auth/login`,
         { email, password: usernameForm.password }
       );
 
