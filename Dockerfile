@@ -1,5 +1,4 @@
-# priorityhub-frontend/Dockerfile
-FROM node:23-alpine
+FROM node:22-slim
 
 WORKDIR /app
 
