@@ -8,8 +8,12 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import RedirectRoute from "./components/RedirectRoute";
 import Home from "./components/Home";
 import Sprints from "./components/Sprints";
+import { useEffect } from "react";
 
 const App = () => {
+  useEffect(() => {
+    document.title = 'PriorityHub';
+  }, []);
   return (
     <Router>
       <Routes>

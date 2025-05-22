@@ -21,6 +21,9 @@ const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editingTaskId, setEditingTaskId] = useState(null);
+  useEffect(() => {
+    document.title = 'My Dashboard';
+  }, []);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);

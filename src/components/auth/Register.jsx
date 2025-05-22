@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom"; 
+import { useEffect } from "react";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -9,6 +10,9 @@ const Register = () => {
     password: "",
     confirmPassword: "",
   });
+  useEffect(() => {
+    document.title = 'Register';
+  }, []);
 
   const styles = {
     container: {
@@ -91,7 +95,6 @@ const Register = () => {
 
   return (
     <div style={styles.container} className="register-container">
-      <title>Register</title>
       <h1>Register</h1>
       {error && <div style={styles.errorMessage}className="error-message">{error}</div>}
       {success && (

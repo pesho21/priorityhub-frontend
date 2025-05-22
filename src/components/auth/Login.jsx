@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useEffect } from "react";
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [usernameForm, setUsernameForm] = useState({ username: "", password: "" });
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  useEffect(() => {
+    document.title = 'Login';
+  }, []);
 
   const styles = {
     container: {

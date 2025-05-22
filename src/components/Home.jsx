@@ -1,10 +1,14 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { isAuthenticated } from "./auth/isAuthenticated";
+import { useEffect } from "react";
 
 const Home = () => {
   const navigate = useNavigate();
   const loggedIn = isAuthenticated();
+  useEffect(() => {
+    document.title = 'PriorityHub';
+  }, []);
 
   const styles = {
     container: {

@@ -14,6 +14,9 @@ const Sprints = () => {
     startDate: "",
     endDate: "",
   });
+  useEffect(() => {
+    document.title = 'My Sprints';
+  }, []);
 
   useEffect(() => {
     fetchSprints();
