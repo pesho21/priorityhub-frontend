@@ -110,6 +110,7 @@ const Login = () => {
 
   return (
     <div style={styles.container} className="login-container">
+      <title>Login</title>
       <h1>Login</h1>
       {error && <div style={styles.errorMessage}>{error}</div>}
 

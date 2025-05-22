@@ -91,6 +91,7 @@ const Register = () => {
 
   return (
     <div style={styles.container} className="register-container">
+      <title>Register</title>
       <h1>Register</h1>
       {error && <div style={styles.errorMessage}className="error-message">{error}</div>}
       {success && (

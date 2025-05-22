@@ -29,6 +29,7 @@ const Home = () => {
 
   return (
     <div style={styles.container}>
+      <title>PriorityHub</title>
       <h1>Welcome to Priority Hub</h1>
       <div className="home-buttons">
         {!loggedIn && (

@@ -104,6 +104,7 @@ const Sprints = () => {
 
   return (
     <div style={{ padding: "20px" }}>
+      <title>Sprints</title>
       <h1>Sprints</h1>
 
       <button onClick={toggleMenu} style={styles.button}>

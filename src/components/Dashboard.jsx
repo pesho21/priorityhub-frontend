@@ -230,6 +230,7 @@ const Dashboard = () => {
 
   return (
     <div>
+      <title>Dashboard</title>
       <h1>Dashboard</h1>
       <button onClick={toggleMenu} style={styles.button}>
         Create Task
